@@ -1,33 +1,23 @@
 # Standard
-# None
+import os
+import argparse
 
 # Pip
-import requests
-from bs4 import BeautifulSoup
+# None
 
 # Custom
-from utils.get_mp3 import get_audio
+from utils.get_mp3 import download_audio
+from utils.get_website import local_source
+from utils.add_mp3_metadata import add_metadata
 
-# URL of the webpage to scrape
-website = (
-    "https://www.podcastfrancaisfacile.com/apprendre-le-francais/phonetique-en-francais"
-)
+# Args
+#download_audio(album, local_source())
+if __name__ == "__main__":
 
-# Send a GET request to the URL and get the HTML content
-response = requests.get(website)
-html_content = response.content
+    album = "Colère"
+    artist = "Podcast Français Facile"
+    genre = "Dialogues"
 
-# Parse the HTML content using Beautiful Soup
-soup = BeautifulSoup(html_content, "html.parser")
-
-# Find elements using tags, classes, or IDs
-
-website_links = soup.find_all("a", href=True)
-data = list()
-
-for link in website_links:
-    href = link["href"]
-    try:
-        get_audio(href)
-    except Exception as e:
-        pass
+    for root, dirs, files in os.walk("download_results"):
+        for row in dirs:
+            add_metadata(album = row , artist = artist, genre = genre)
